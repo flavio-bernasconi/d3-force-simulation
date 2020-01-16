@@ -6,8 +6,10 @@ import '@accurat/tachyons-lite'
 import 'tachyons-extra'
 import './reset.css'
 import './style.css'
+import chart from './chart'
 
 function renderApp() {
+  chart()
   ReactDOM.render(<App />, document.getElementById('root'))
 }
 
