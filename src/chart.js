@@ -2,7 +2,7 @@ import * as d3 from 'd3'
 import './style.css'
 
 export default function chart() {
-  const width = 1560
+  const width = 1260
   const height = 1000
 
   const svg = d3
@@ -14,12 +14,14 @@ export default function chart() {
   const nodesNumber = 100
   const firstPercentual = (nodesNumber / 100) * 20
   const secondPercentual = (nodesNumber / 100) * 50
+  const zero = []
 
   var nodes = d3.range(nodesNumber).map((n, i) => {
     var node = {}
-    node.groupA = Math.floor(Math.random() * 3) //sum must be equal firstGroup + secondGroup
+    node.groupA = Math.floor(Math.random() * 3)
     if (i <= firstPercentual) {
       node.groupB = 0
+      zero.push(node)
     } else if (i > firstPercentual && i > secondPercentual) {
       node.groupB = 1
     } else {
@@ -42,7 +44,6 @@ export default function chart() {
     .forceSimulation(nodes)
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 2))
-
     .on('tick', ticked)
 
   var node = svg
@@ -52,7 +53,7 @@ export default function chart() {
     .data(nodes)
     .enter()
     .append('circle')
-    .attr('r', 5)
+    .attr('r', d => Math.abs(d.x) / 7)
 
   var current = 'groupA'
 
@@ -89,7 +90,7 @@ export default function chart() {
     }
   }
 
-  window.onscroll = function() {
+  window.onscroll = () => {
     var currentScrollPos = window.pageYOffset
     if (currentScrollPos > 300 && currentScrollPos < 1000) {
       current = 'groupB'
